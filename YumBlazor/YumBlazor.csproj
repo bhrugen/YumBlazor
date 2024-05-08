@@ -17,7 +17,6 @@
   <ItemGroup>
     <Folder Include="Services\Extensions\" />
     <Folder Include="Services\" />
-    <Folder Include="Repository\IRepository\" />
     <Folder Include="ViewModels\" />
     <Folder Include="wwwroot\images\" />
   </ItemGroup>
