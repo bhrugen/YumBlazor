@@ -32,7 +32,7 @@ else
                     <div class="row mt-3">
                         <div class="col-6 col-md-3">
                             <button type="submit" class="btn btn-primary form-control" disabled="@IsProcessing">
-                                <i class="bi bi-floppy2-fill"></i> Update
+                                <i class="bi bi-floppy2-fill"></i> @(Id == 0 ? "Create" : "Update")
                             </button>
                         </div>
                         <div class="col-6 col-md-3">
