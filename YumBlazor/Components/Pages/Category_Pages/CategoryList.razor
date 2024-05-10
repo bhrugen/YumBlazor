@@ -57,15 +57,13 @@ else
     protected override async Task OnInitializedAsync()
     {
         IsProcessing = true;
-        await Task.Yield();
-        LoadCategories();
+        await LoadCategories();
         IsProcessing = false;
     }
 
-    private void LoadCategories()
+    private async Task LoadCategories()
     {
-        Thread.Sleep(5000);
-        Categories= _categoryRepository.GetAll();
+        Categories= await _categoryRepository.GetAllAsync();
         // Load categories
     }
 }
