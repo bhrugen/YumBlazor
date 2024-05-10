@@ -37,6 +37,11 @@ else
                         <ValidationMessage For="@(() => Product.Description)" />
                     </div>
                     <div class="form-floating py-3 col-12">
+                        <InputText @bind-Value="Product.SpecialTag" class="form-control" id="SpecialTag" placeholder="Description" />
+                        <label for="SpecialTag">Special Tag</label>
+                        <ValidationMessage For="@(() => Product.SpecialTag)" />
+                    </div>
+                    <div class="form-floating py-3 col-12">
                         <InputNumber @bind-Value="Product.Price" class="form-control" id="Price" placeholder="Price" />
                         <label for="Price">Price</label>
                         <ValidationMessage For="@(() => Product.Price)" />

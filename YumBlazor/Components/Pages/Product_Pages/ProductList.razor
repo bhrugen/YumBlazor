@@ -53,7 +53,7 @@ else
                                     @obj.Name
                                 </td>
                                 <td>@obj.Price.ToString("C", CultureInfo.GetCultureInfo("en-us"))</td>
-                                <td>@obj.SpecialTag</td>
+                                <td><span class="badge text-bg-info"> @obj.SpecialTag</span></td>
                                 <td>@obj.Category.Name</td>
                                 <td>
                                     <a href="@($"product/update/{obj.Id}")" class="btn btn-primary">
