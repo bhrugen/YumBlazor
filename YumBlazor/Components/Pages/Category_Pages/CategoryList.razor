@@ -1,5 +1,9 @@
 ﻿@page "/category"
 @inject ICategoryRepository _categoryRepository
+
+
+<YumBlazor.Components.Shared.BsModal></YumBlazor.Components.Shared.BsModal>
+
 @if (IsProcessing)
 {
     <div class="position-absolute w-75 h-75 d-flex flex-column align-items-center bg-white justify-content-center">
