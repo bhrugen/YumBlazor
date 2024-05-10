@@ -1,6 +1,7 @@
 ﻿@page "/category/create"
 @page "/category/update/{id:int}"
 @inject ICategoryRepository _categoryRepository
+@inject NavigationManager _navigationManager
 
 @if (IsProcessing)
 {
@@ -19,13 +20,30 @@ else
             </div>
         </div>
         <div class="card-body p-4">
-            <div class="row pb-3">
-                <div class="col-12 text-end">
-                    <a href="category/create" class="btn btn-lg btn-secondary" style="width:250px;">
-                        <i class="bi bi-plus-square"></i> Add New Category
-                    </a>
+            <EditForm Model="Category" FormName="CategoryUpsertForm" OnValidSubmit="UpsertCategory">
+                <DataAnnotationsValidator/>
+                
+                <div class="border p-3 mt-4">
+                    <div class="form-floating py-3 col-12">
+                        <InputText @bind-Value="Category.Name" class="form-control" id="Name" placeholder="Name" />
+                        <label for="Name">Name</label>
+                        <ValidationMessage For="@(() => Category.Name)" />
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-6 col-md-3">
+                            <button type="submit" class="btn btn-primary form-control" disabled="@IsProcessing">
+                                <i class="bi bi-floppy2-fill"></i> Update
+                            </button>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <a href="category" class="btn btn-secondary form-control" disabled="@IsProcessing">
+                                <i class="bi bi-arrow-bar-left"></i> Back to List
+                            </a>
+                        </div>
+                    </div>
                 </div>
-            </div>
+                
+            </EditForm>
             
         </div>
     </div>
@@ -58,5 +76,22 @@ else
         {
             Category = await _categoryRepository.GetAsync(Id);
         }
+    }
+
+    private async Task UpsertCategory()
+    {
+        IsProcessing = true;
+        if (Category.Id == 0)
+        {
+            //create
+            await _categoryRepository.CreateAsync(Category);
+        }
+        else
+        {
+            //update
+            await _categoryRepository.UpdateAsync(Category);
+        }
+        IsProcessing = false;
+        _navigationManager.NavigateTo("category");
     }
 }
