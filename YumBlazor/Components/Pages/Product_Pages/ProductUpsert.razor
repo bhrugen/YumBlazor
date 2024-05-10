@@ -64,7 +64,7 @@ else
                                     <img src="@Product.ImageUrl" alt="..." class="img-thumbnail">
                                 </div>
                                 <div class="col-md-9">
-                                    <i class="bi bi-trash btn btn-outline-danger">Remove</i>
+                                    <i class="bi bi-trash btn btn-outline-danger" @onclick="DeleteImage">Remove</i>
                                 </div>
                             </div>
                         }
@@ -163,5 +163,24 @@ else
         await file.OpenReadStream(file.Size).CopyToAsync(fileStream);
         Product.ImageUrl = $"/images/product/{newFileName}";
         IsProcessing=false;
+    }
+
+    void DeleteImage()
+    {
+        if (Product.ImageUrl == null)
+            return;
+
+
+            var fileToDelete = Product.ImageUrl.Split('/').Reverse().First();
+
+        var filePathToDeleteImage = Path.Combine(_directoryPath, fileToDelete);
+
+        if (!File.Exists(filePathToDeleteImage))
+            return;
+
+            File.Delete(filePathToDeleteImage);
+
+            Product.ImageUrl = null;
+            return;
     }
 }
