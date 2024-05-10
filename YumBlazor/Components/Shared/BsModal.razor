@@ -11,9 +11,28 @@
                 ...
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Save changes</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                        @onclick="()=>ConfirmationClicked(false)">
+                    Close
+                </button>
+                <button type="button" class="btn btn-primary"
+                        @onclick="()=>ConfirmationClicked(true)">
+                    Delete
+                </button>
             </div>
         </div>
     </div>
 </div>
+
+@code{
+    [Parameter]
+    public EventCallback<bool> OnModalConfirmation { get; set; }
+
+    private async Task ConfirmationClicked(bool value)
+    {
+        if (value)
+        {
+            await OnModalConfirmation.InvokeAsync(true);
+        }
+    }
+}

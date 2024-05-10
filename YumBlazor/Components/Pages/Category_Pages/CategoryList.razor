@@ -2,7 +2,7 @@
 @inject ICategoryRepository _categoryRepository
 @inject IJSRuntime _JS
 
-<YumBlazor.Components.Shared.BsModal></YumBlazor.Components.Shared.BsModal>
+<YumBlazor.Components.Shared.BsModal OnModalConfirmation="ConfirmDelete_Click"></YumBlazor.Components.Shared.BsModal>
 
 @if (IsProcessing)
 {
@@ -96,6 +96,7 @@ else
     private async Task ConfirmDelete_Click(bool isConfirmed)
     {
         IsProcessing = true;
+        await _JS.InvokeVoidAsync("HideConfirmationModal");
         if(isConfirmed && DeleteCategoryID != 0)
         {
             var result = await _categoryRepository.DeleteAsync(DeleteCategoryID);
@@ -106,6 +107,7 @@ else
 
             await LoadCategories();
         }
+        
         DeleteCategoryID = 0;
         IsProcessing = false;
     }
