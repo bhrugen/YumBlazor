@@ -48,7 +48,7 @@ else
                                     <a href="@($"category/update/{obj.Id}")" class="btn btn-primary">
                                         <i class="bi bi-pencil-square"></i> Edit
                                     </a>
-                                    <button class="btn btn-danger" @onclick="HandleDelete">
+                                    <button class="btn btn-danger" @onclick="()=>HandleDelete(obj.Id)">
                                         <i class="bi bi-trash3"></i> Delete
                                     </button>
                                 </td>
@@ -91,5 +91,22 @@ else
     {
         DeleteCategoryID = id;
         _JS.InvokeVoidAsync("ShowConfirmationModal");
+    }
+
+    private async Task ConfirmDelete_Click(bool isConfirmed)
+    {
+        IsProcessing = true;
+        if(isConfirmed && DeleteCategoryID != 0)
+        {
+            var result = await _categoryRepository.DeleteAsync(DeleteCategoryID);
+            if(result)
+                _JS?.ToastrSuccess("Category Delete Successfully");
+            else
+                _JS?.ToastrError("Error Encountered while deleting");
+
+            await LoadCategories();
+        }
+        DeleteCategoryID = 0;
+        IsProcessing = false;
     }
 }
