@@ -2,7 +2,11 @@
 @inject ICategoryRepository _categoryRepository
 @inject IJSRuntime _JS
 
-<YumBlazor.Components.Shared.BsModal OnModalConfirmation="ConfirmDelete_Click"></YumBlazor.Components.Shared.BsModal>
+<BsModal OnModalConfirmation="ConfirmDelete_Click"
+        ButtonBootstrapStyle="btn-danger"
+        ButtonText="Delete"
+        Title="Are you sure you want to delete this Category?">
+</BsModal>
 
 @if (IsProcessing)
 {
