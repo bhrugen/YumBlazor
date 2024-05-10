@@ -1,9 +1,62 @@
 ﻿@page "/category/create"
 @page "/category/update/{id:int}"
+@inject ICategoryRepository _categoryRepository
 
-<h3>CategoryUpsert</h3>
+@if (IsProcessing)
+{
+    <div class="position-absolute w-75 h-75 d-flex flex-column align-items-center bg-white justify-content-center">
+        <img src="/images/loading.gif" alt="loading" />
+    </div>
+}
+else
+{
+    <div class="card shadow border-0 mt-4">
+        <div class="card-header bg-black bg-gradient ml-0 py-3">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h2 class="text-white py-2">@(Id>0?"Create": "Update") Category</h2>
+                </div>
+            </div>
+        </div>
+        <div class="card-body p-4">
+            <div class="row pb-3">
+                <div class="col-12 text-end">
+                    <a href="category/create" class="btn btn-lg btn-secondary" style="width:250px;">
+                        <i class="bi bi-plus-square"></i> Add New Category
+                    </a>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+}
+
 
 @code {
     [Parameter]
     public int Id { get; set; }
+
+    [SupplyParameterFromForm]
+    private Category Category { get; set; } = new Category();
+
+    private bool IsProcessing { get; set; } = true;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await LoadCategory();
+            IsProcessing = false;
+            StateHasChanged();
+        }
+        //return base.OnAfterRenderAsync(firstRender);
+    }
+
+    private async Task LoadCategory()
+    {
+        if (Id > 0)
+        {
+            Category = await _categoryRepository.GetAsync(Id);
+        }
+    }
 }
