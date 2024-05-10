@@ -3,7 +3,7 @@
 @if (IsProcessing)
 {
     <div class="position-absolute w-75 h-75 d-flex flex-coumn align-items-center bg-white justify-content-center">
-        <img src="~/images/loading.gif" alt="loading" />
+        <img src="/images/loading.gif" alt="loading" />
     </div>
 }
 else
@@ -29,4 +29,18 @@ else
 
 @code {
     public bool IsProcessing { get; set; } = false;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        IsProcessing = true;
+        await Task.Delay(2000);
+        LoadCategories();
+        IsProcessing = false;
+    }
+
+    private void LoadCategories()
+    {
+        // Load categories
+    }
 }
