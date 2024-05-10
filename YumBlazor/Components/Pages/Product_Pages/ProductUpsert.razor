@@ -1,0 +1,99 @@
+﻿@page "/product/create"
+@page "/product/update/{id:int}"
+@inject IProductRepository _productRepository
+@inject NavigationManager _navigationManager
+@inject IJSRuntime _JS
+@if (IsProcessing)
+{
+    <div class="position-absolute w-75 h-75 d-flex flex-column align-items-center bg-white justify-content-center">
+        <img src="/images/loading.gif" alt="loading" />
+    </div>
+}
+else
+{
+    <div class="card shadow border-0 mt-4">
+        <div class="card-header bg-black bg-gradient ml-0 py-3">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <h2 class="text-white py-2">@(Id>0?"Create": "Update") Product</h2>
+                </div>
+            </div>
+        </div>
+        <div class="card-body p-4">
+            <EditForm Model="Product" FormName="ProductUpsertForm" OnValidSubmit="UpsertProduct">
+                <DataAnnotationsValidator/>
+                
+                <div class="border p-3 mt-4">
+                    <div class="form-floating py-3 col-12">
+                        <InputText @bind-Value="Product.Name" class="form-control" id="Name" placeholder="Name" />
+                        <label for="Name">Name</label>
+                        <ValidationMessage For="@(() => Product.Name)" />
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-6 col-md-3">
+                            <button type="submit" class="btn btn-primary form-control" disabled="@IsProcessing">
+                                <i class="bi bi-floppy2-fill"></i> Update
+                            </button>
+                        </div>
+                        <div class="col-6 col-md-3">
+                            <a href="product" class="btn btn-secondary form-control" disabled="@IsProcessing">
+                                <i class="bi bi-arrow-bar-left"></i> Back to List
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+            </EditForm>
+            
+        </div>
+    </div>
+}
+
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    [SupplyParameterFromForm]
+    private Product Product { get; set; } = new Product();
+
+    private bool IsProcessing { get; set; } = true;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await LoadProduct();
+            IsProcessing = false;
+            StateHasChanged();
+        }
+        //return base.OnAfterRenderAsync(firstRender);
+    }
+
+    private async Task LoadProduct()
+    {
+        if (Id > 0)
+        {
+            Product = await _productRepository.GetAsync(Id);
+        }
+    }
+
+    private async Task UpsertProduct()
+    {
+        IsProcessing = true;
+        if (Product.Id == 0)
+        {
+            //create
+            await _productRepository.CreateAsync(Product);
+            await _JS.ToastrSuccess("Product Created Successfully");
+        }
+        else
+        {
+            //update
+            await _productRepository.UpdateAsync(Product);
+            await _JS.ToastrSuccess("Product Updated Successfully");
+        }
+        IsProcessing = false;
+        _navigationManager.NavigateTo("product");
+    }
+}
