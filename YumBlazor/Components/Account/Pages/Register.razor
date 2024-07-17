@@ -6,6 +6,7 @@
 @using Microsoft.AspNetCore.Identity
 @using Microsoft.AspNetCore.WebUtilities
 @using YumBlazor.Data
+@using YumBlazor.Utility
 
 @inject UserManager<ApplicationUser> UserManager
 @inject IUserStore<ApplicationUser> UserStore
@@ -41,6 +42,14 @@
                     <div class="form-floating mb-3">
                         <InputText type="password" @bind-Value="Input.ConfirmPassword" class="form-control" autocomplete="new-password" aria-required="true" placeholder="password" />
                         <label for="confirm-password">Confirm Password</label>
+                        <ValidationMessage For="() => Input.ConfirmPassword" class="text-danger" />
+                    </div>
+                    <div class="form-floating mb-3">
+                        <InputSelect @bind-Value="Input.Role" class="form-select">
+                            <option value="@SD.Role_Customer" selected >@SD.Role_Customer</option>
+                            <option value="@SD.Role_Admin">@SD.Role_Admin</option>
+                        </InputSelect>
+                        <label for="role">Select Role</label>
                         <ValidationMessage For="() => Input.ConfirmPassword" class="text-danger" />
                     </div>
                     <button type="submit" class="w-100 btn btn-lg btn-primary">Register</button>
@@ -150,5 +159,7 @@
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; } = "";
+
+        public string? Role { get; set; }
     }
 }
