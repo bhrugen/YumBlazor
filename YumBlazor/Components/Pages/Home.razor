@@ -40,7 +40,7 @@ else
             </ul>
             <div class="row mt-4 mx-1">
 
-                @foreach (var prod in Products)
+                @foreach (var prod in FilteredProducts)
                 {
                     <div class="col-12 col-md-6 col-lg-4 pe-3 mb-5">
                         <div class="card">
@@ -86,7 +86,10 @@ else
 @code{
     private IEnumerable<Product> Products = new List<Product>();
     private IEnumerable<Category> Categories = new List<Category>();
+    private IEnumerable<Product> FilteredProducts = new List<Product>();
     private bool IsProcessing { get; set; } = true;
+    private int _selectedCategoryId = 0;
+    private string _searchText = "";
 
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -103,6 +106,31 @@ else
     {
         Products = await _productRepository.GetAllAsync();
         Categories = await _categoryRepository.GetAllAsync();
+        FilterProducts(0);
+    }
+
+
+    private void FilterProducts(int categoryId)
+    {
+        if (categoryId == 0)
+        {
+            FilteredProducts = Products;
+            _selectedCategoryId = categoryId;
+        }
+    }
+
+    private void FilterProductByName(string newValueOfSearchText)
+    {
+        if (string.IsNullOrWhiteSpace(newValueOfSearchText))
+        {
+            FilteredProducts = Products;
+        }
+        else
+        {
+            FilteredProducts = Products
+            .Where(u => u.Name.Contains(newValueOfSearchText, StringComparison.InvariantCultureIgnoreCase)).ToList();
+        }
+        _searchText = newValueOfSearchText;
     }
 
 }   
