@@ -29,12 +29,12 @@ else
         <div class="content px-4 m-2">
             <ul class="nav nav-underline justify-content-center mb-2">
                 <li class="nav-item">
-                    <span class="nav-link" href="#" style="cursor: pointer">All</span>
+                    <span class="nav-link" href="#" style="cursor: pointer" @onclick="()=>FilterProducts(0)">All</span>
                 </li>
                 @foreach (var category in Categories)
                 {
                     <li class="nav-item">
-                        <span class="nav-link" href="#" style="cursor: pointer">@category.Name</span>
+                        <span class="nav-link" href="#" style="cursor: pointer" @onclick="()=>FilterProducts(category.Id)">@category.Name</span>
                     </li>
                 }
                 
@@ -117,6 +117,13 @@ else
         {
             FilteredProducts = Products;
             _selectedCategoryId = categoryId;
+            return;
+        }
+        else
+        {
+            FilteredProducts = Products.Where(u => u.CategoryId == categoryId).ToList();
+            _selectedCategoryId = categoryId;
+            _searchText = String.Empty;
         }
     }
 
