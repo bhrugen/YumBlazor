@@ -1,7 +1,87 @@
 ﻿@page "/cart"
 
-<h3>Cart</h3>
+<div class="row w-100">
+	<div class="col-lg-6 col-12">
+		<div class="container p-4 m-2">
+			<h4 class="text-center text-success display-6">
+				Cart Summary
+			</h4>
 
-@code {
 
-}
+			<div class="d-flex p-2 m-2">
+				<div class="card flex-row w-100">
+					<img class="card-img-left" style="width: 120px;">
+					<div class="card-body">
+						<div class="d-flex justify-content-between align-items-center">
+							<h4 class="">
+								--ProductName--
+							</h4>
+							<h4>
+								--PRICE--
+							</h4>
+						</div>
+						<div class="flex-fill">
+							<h4 class="text-danger">
+								--COUNT*PRICE--
+							</h4>
+						</div>
+						<div class="d-flex justify-content-between align-items-center">
+							<div class="d-flex justify-content-between g-0">
+								<span>
+									<i class="bi bi-dash-circle-fill btn text-secondary"></i>
+								</span>
+								<span class="ml-1 me-1">
+									<b class="lead">--Count--</b>
+								</span>
+								<span>
+									<i class="bi bi-plus-circle-fill btn text-secondary"></i>
+								</span>
+							</div>
+							<button class="btn btn-danger">Remove</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	<div class="col-lg-6 col-12 p-4">
+		<div class="card">
+			<div class="card-header text-success text-center display-6">
+				Pickup Details
+			</div>
+			<div class="card-body">
+				<form>
+					<div class="form-group">
+						<label>Name</label>
+						<input type="text" class="form-control" />
+					</div>
+					<div class="form-group">
+						<label>Email</label>
+						<input type="text" class="form-control" />
+					</div>
+					<div class="form-group">
+						<label>Phone</label>
+						<input type="text" class="form-control" />
+					</div>
+
+				</form>
+				<div class="card mt-4 bg-light">
+					<div class="card-body">
+						<h4>
+							Grand Total: --$$--
+						</h4>
+						<h4>
+							No. of Items: --COUNT--
+						</h4>
+					</div>
+
+				</div>
+			</div>
+
+			<button class="btn btn-success m-4">
+				Looks Good? Place Order!
+			</button>
+		</div>
+	</div>
+</div>
