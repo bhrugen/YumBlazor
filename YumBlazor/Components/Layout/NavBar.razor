@@ -1,0 +1,47 @@
+﻿<nav class="navbar navbar-expand-md navbar-dark bg-dark pb-4 pt-4">
+	<div class="container-fluid">
+		<a class="navbar-brand" href="">
+			<img src="/images/Logo.png" alt="Bootstrap" width="30" height="24">
+			YumBlazor
+		</a>
+		<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
+				aria-controls="navbarCollapse" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarCollapse">
+			<ul class="navbar-nav me-auto mb-2 mb-md-0">
+				<li class="nav-item">
+					<NavLink class="nav-link" href="">
+						<span class="bi bi-house-door" aria-hidden="true"></span> Home
+					</NavLink>
+				</li>
+			</ul>
+			<ul class="d-flex navbar-nav mb-2 mb-md-0">
+				<li class="nav-item">
+					<button class="nav-link active me-2" style="cursor: pointer; background: transparent; border: 0px;">
+						Welcome, --Name--
+					</button>
+				</li>
+				<li class="nav-item">
+					<form action="" method="post">
+						<AntiforgeryToken />
+						<input type="hidden" name="ReturnUrl" value="" />
+						<button type="submit" class="nav-link btn btn-success">
+							<span class="bi bi-arrow-bar-left-nav-menu" aria-hidden="true"></span> Logout
+						</button>
+					</form>
+				</li>
+				<li class="nav-item">
+					<NavLink class="nav-link" href="">
+						<span class="bi bi-person-nav-menu" aria-hidden="true"></span> Register
+					</NavLink>
+				</li>
+				<li class="nav-item">
+					<NavLink class="nav-link btn btn-success" href="">
+						<span class="bi bi-person-badge-nav-menu" aria-hidden="true"></span> Login
+					</NavLink>
+				</li>
+			</ul>
+		</div>
+	</div>
+</nav>
