@@ -1,26 +1,19 @@
 ﻿@using YumBlazor.Utility
 @inherits LayoutComponentBase
+@inject AuthenticationStateProvider AuthenticationStateProvider
 
 <div class="page">
-  @*   <AuthorizeView>
-        Any authorized User
-    </AuthorizeView>
     <AuthorizeView Roles="@SD.Role_Admin">
-        ADMIN
+        <div class="sidebar">
+            <NavMenu />
+        </div>
     </AuthorizeView>
-    <AuthorizeView Roles="@SD.Role_Customer">
-        CUSTOMER
-    </AuthorizeView> *@
-    <div class="sidebar">
-        <NavMenu />
-    </div>
 
     <main>
-        <NavBar></NavBar>
-        <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
-        </div>
-
+        @if (_navBarVisible) 
+        {
+            <NavBar></NavBar>
+        }
         <article class="content px-4">
             @Body
         </article>
@@ -32,3 +25,35 @@
     <a href="." class="reload">Reload</a>
     <span class="dismiss">🗙</span>
 </div>
+
+@code{
+    private bool _navBarVisible;
+    protected override async Task OnInitializedAsync()
+    {
+        _navBarVisible = await ShowNavBar();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        _navBarVisible = await ShowNavBar();
+    }
+
+    private async Task<bool> ShowNavBar()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        var authenticated = user.Identity is not null && user.Identity.IsAuthenticated;
+
+        if (!authenticated)
+        {
+            return true;
+        }
+
+        //Navbar should not be displayed to admin user
+        if (!user.IsInRole(SD.Role_Admin))
+        {
+            return true;
+        }
+        return false;
+    }
+}
