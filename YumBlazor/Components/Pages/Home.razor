@@ -1,6 +1,7 @@
 ﻿@page "/"
 @using System.Globalization
 @inject IProductRepository _productRepository
+@inject ICategoryRepository _categoryRepository
 
 <PageTitle>Home</PageTitle>
 @if (IsProcessing)
@@ -29,12 +30,13 @@ else
                 <li class="nav-item">
                     <span class="nav-link" href="#" style="cursor: pointer">All</span>
                 </li>
-                <li class="nav-item">
-                    <span class="nav-link" href="#" style="cursor: pointer">Cat 1</span>
-                </li>
-                <li class="nav-item">
-                    <span class="nav-link" href="#" style="cursor: pointer">Cat 2</span>
-                </li>
+                @foreach (var category in Categories)
+                {
+                    <li class="nav-item">
+                        <span class="nav-link" href="#" style="cursor: pointer">@category.Name</span>
+                    </li>
+                }
+                
             </ul>
             <div class="row mt-4 mx-1">
 
@@ -83,6 +85,7 @@ else
 
 @code{
     private IEnumerable<Product> Products = new List<Product>();
+    private IEnumerable<Category> Categories = new List<Category>();
     private bool IsProcessing { get; set; } = true;
 
 
@@ -99,6 +102,7 @@ else
     private async Task LoadProducts()
     {
         Products = await _productRepository.GetAllAsync();
+        Categories = await _categoryRepository.GetAllAsync();
     }
 
 }   
