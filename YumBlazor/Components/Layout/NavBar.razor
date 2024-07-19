@@ -17,30 +17,36 @@
 				</li>
 			</ul>
 			<ul class="d-flex navbar-nav mb-2 mb-md-0">
-				<li class="nav-item">
-					<button class="nav-link active me-2" style="cursor: pointer; background: transparent; border: 0px;">
-						Welcome, --Name--
-					</button>
-				</li>
-				<li class="nav-item">
-					<form action="Account/Logout" method="post">
-						<AntiforgeryToken />
-						<input type="hidden" name="ReturnUrl" value="" />
-						<button type="submit" class="nav-link btn btn-success">
-							<span class="bi bi-arrow-bar-left-nav-menu" aria-hidden="true"></span> Logout
-						</button>
-					</form>
-				</li>
-				<li class="nav-item">
-					<NavLink class="nav-link" href="Account/Register">
-						<span class="bi bi-person-nav-menu" aria-hidden="true"></span> Register
-					</NavLink>
-				</li>
-				<li class="nav-item">
-					<NavLink class="nav-link btn btn-success" href="Account/Login">
-						<span class="bi bi-person-badge-nav-menu" aria-hidden="true"></span> Login
-					</NavLink>
-				</li>
+				<AuthorizeView>
+					<Authorized>
+						<li class="nav-item">
+							<button class="nav-link active me-2" style="cursor: pointer; background: transparent; border: 0px;">
+								Welcome, @context?.User?.Identity?.Name
+							</button>
+						</li>
+						<li class="nav-item">
+							<form action="Account/Logout" method="post">
+								<AntiforgeryToken />
+								<input type="hidden" name="ReturnUrl" value="" />
+								<button type="submit" class="nav-link btn btn-success">
+									<span class="bi bi-arrow-bar-left-nav-menu" aria-hidden="true"></span> Logout
+								</button>
+							</form>
+						</li>
+					</Authorized>
+					<NotAuthorized>
+						<li class="nav-item">
+							<NavLink class="nav-link" href="Account/Register">
+								<span class="bi bi-person-nav-menu" aria-hidden="true"></span> Register
+							</NavLink>
+						</li>
+						<li class="nav-item">
+							<NavLink class="nav-link btn btn-success" href="Account/Login">
+								<span class="bi bi-person-badge-nav-menu" aria-hidden="true"></span> Login
+							</NavLink>
+						</li>
+					</NotAuthorized>
+				</AuthorizeView>
 			</ul>
 		</div>
 	</div>
