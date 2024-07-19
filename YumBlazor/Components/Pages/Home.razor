@@ -29,12 +29,15 @@ else
         <div class="content px-4 m-2">
             <ul class="nav nav-underline justify-content-center mb-2">
                 <li class="nav-item">
-                    <span class="nav-link" href="#" style="cursor: pointer" @onclick="()=>FilterProducts(0)">All</span>
+                    <span class="nav-link @GetActiveTabClass(0)" href="#" style="cursor: pointer" @onclick="()=>FilterProducts(0)">All</span>
                 </li>
                 @foreach (var category in Categories)
                 {
                     <li class="nav-item">
-                        <span class="nav-link" href="#" style="cursor: pointer" @onclick="()=>FilterProducts(category.Id)">@category.Name</span>
+                        <span class="nav-link @GetActiveTabClass(category.Id)" href="#" style="cursor: pointer" 
+                        @onclick="()=>FilterProducts(category.Id)">
+                            @category.Name
+                        </span>
                     </li>
                 }
                 
@@ -139,6 +142,11 @@ else
             .Where(u => u.Name.Contains(newValueOfSearchText, StringComparison.InvariantCultureIgnoreCase)).ToList();
         }
         _searchText = newValueOfSearchText;
+    }
+
+    private string GetActiveTabClass(int categoryId)
+    {
+        return categoryId == _selectedCategoryId ? "active" : string.Empty;
     }
 
 }   
