@@ -2,6 +2,55 @@
 
 <PageTitle>Home</PageTitle>
 
-<h1>Hello, world!</h1>
+<div class="container-fluid px-0 m-0 full-width">
+    <div class="jumbotron-custom">
+        <div class="m-auto d-flex align-items-center" style="width: 400px; height: 50vh;">
 
-Welcome to your new app.
+            <div class="d-flex align-items-center" style="width: 100%;">
+                <input type="text" class="form-control rounded-pill"
+                       placeholder="Search for Food Items!"
+                       style="width: 100%; padding: 20px;">
+                <span style="position: relative; left: -43px;"><i class="bi bi-search"></i></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="content px-4 m-2">
+        <ul class="nav nav-underline justify-content-center mb-2">
+            <li class="nav-item">
+                <span class="nav-link" href="#" style="cursor: pointer">All</span>
+            </li>
+            <li class="nav-item">
+                <span class="nav-link" href="#" style="cursor: pointer">Cat 1</span>
+            </li>
+            <li class="nav-item">
+                <span class="nav-link" href="#" style="cursor: pointer">Cat 2</span>
+            </li>
+        </ul>
+        <div class="row mt-4 mx-1">
+            <div class="col-12 col-md-6 col-lg-4 pe-3 mb-5">
+                <div class="card">
+                    <div class="mt-3 mb-2 row">
+                        <div class="col-6 px-3">
+                            <i class="bi bi-star btn btn-outline-success disabled"> SpecialTag</i>
+                        </div>
+                        <div class="col-6 text-end px-3">
+                            --PRICE--
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <img class="card-img-top img-thumbnail img-rounded w-50 mt-2" src="images/default.png" style="">
+                    </div>
+                    <div class="card-body">
+                        <h5 class="card-title text-center lead text-success">Name</h5>
+                        <h4 class="text-center">
+                            <i class="bi bi-cart3 btn btn-success text-right  px-5" style="width:300px"> Add to cart</i>
+                        </h4>
+                        <p class="card-text mt-2">Description</p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
