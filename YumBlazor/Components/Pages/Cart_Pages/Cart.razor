@@ -1,5 +1,6 @@
 ﻿@page "/cart"
 @using Microsoft.AspNetCore.Authorization
+@using System.Globalization
 @inject AuthenticationStateProvider _AuthenticationStateProvider
 @inject IShoppingCartRepository _cartRepository
 @attribute [Authorize]
@@ -19,42 +20,43 @@ else
                 Cart Summary
             </h4>
 
-
-            <div class="d-flex p-2 m-2">
-                <div class="card flex-row w-100">
-                    <img class="card-img-left" style="width: 120px;">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h4 class="">
-                                --ProductName--
-                            </h4>
-                            <h4>
-                                --PRICE--
-                            </h4>
-                        </div>
-                        <div class="flex-fill">
-                            <h4 class="text-danger">
-                                --COUNT*PRICE--
-                            </h4>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center">
-                            <div class="d-flex justify-content-between g-0">
-                                <span>
-                                    <i class="bi bi-dash-circle-fill btn text-secondary"></i>
-                                </span>
-                                <span class="ml-1 me-1">
-                                    <b class="lead">--Count--</b>
-                                </span>
-                                <span>
-                                    <i class="bi bi-plus-circle-fill btn text-secondary"></i>
-                                </span>
+                @foreach (var cartItem in ShoppingCarts)
+                {
+                    <div class="d-flex p-2 m-2">
+                        <div class="card flex-row w-100">
+                        <img class="card-img-left" style="width: 120px;" src="@(cartItem.Product.ImageUrl ?? "/images/default.png")">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h4 class="">
+                                        @cartItem.Product.Name
+                                    </h4>
+                                    <h4>
+                                        @cartItem.Product.Price.ToString("C", CultureInfo.GetCultureInfo("en-us"))
+                                    </h4>
+                                </div>
+                                <div class="flex-fill">
+                                    <h4 class="text-danger">
+                                        @((cartItem.Product.Price * cartItem.Count).ToString("C", CultureInfo.GetCultureInfo("en-us")))
+                                    </h4>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div class="d-flex justify-content-between g-0">
+                                        <span>
+                                            <i class="bi bi-dash-circle-fill btn text-secondary"></i>
+                                        </span>
+                                        <span class="ml-1 me-1">
+                                            <b class="lead">@cartItem.Count</b>
+                                        </span>
+                                        <span>
+                                            <i class="bi bi-plus-circle-fill btn text-secondary"></i>
+                                        </span>
+                                    </div>
+                                    <button class="btn btn-danger">Remove</button>
+                                </div>
                             </div>
-                            <button class="btn btn-danger">Remove</button>
                         </div>
                     </div>
-                </div>
-            </div>
-
+                }
         </div>
     </div>
     <div class="col-lg-6 col-12 p-4">
