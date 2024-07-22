@@ -1,6 +1,7 @@
 ﻿@page "/cart"
 @using Microsoft.AspNetCore.Authorization
 @using System.Globalization
+@using YumBlazor.Utility
 @inject AuthenticationStateProvider _AuthenticationStateProvider
 @inject IShoppingCartRepository _cartRepository
 @attribute [Authorize]
@@ -13,6 +14,8 @@
 }
 else
 {
+    @if(ShoppingCarts.Any())
+    {
     <div class="row w-100">
         <div class="col-lg-6 col-12">
             <div class="container p-4 m-2">
@@ -104,6 +107,15 @@ else
             </div>
         </div>
     </div>
+    }
+    else
+    {
+        <div class="p-4">
+            <div class="alert alert-warning">
+                Your cart is empty! Please add items to cart.
+            </div>
+        </div>
+    }
 }
 
 @code {
@@ -112,6 +124,14 @@ else
     [SupplyParameterFromForm]
     public OrderHeader OrderHeader { get; set; } = new OrderHeader();
     private int TotalItems { get; set; } = 0;
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await _AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        OrderHeader.Email= user.FindFirst(u => u.Type.Contains("email"))?.Value;
+        OrderHeader.UserId = user.FindFirst(u => u.Type.Contains("nameidentifier"))?.Value;
+    }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
@@ -125,20 +145,24 @@ else
 
     private async Task LoadCart()
     {
-        var authState = await _AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
-        ShoppingCarts = await _cartRepository.GetAllAsync(user.FindFirst(u => u.Type.Contains("nameidentifier"))?.Value);
+        
+        ShoppingCarts = await _cartRepository.GetAllAsync(OrderHeader.UserId);
+
+        OrderHeader.OrderTotal = 0;
+        TotalItems = 0;
+        foreach(var cart in ShoppingCarts)
+        {
+            OrderHeader.OrderTotal += (Convert.ToDouble(cart.Product.Price) * cart.Count);
+            TotalItems += cart.Count;
+        }
+        OrderHeader.OrderTotal= Math.Round(OrderHeader.OrderTotal, 2);
     }
 
     private async Task UpdateCartItem(int productId, int updateBy)
     {
-        var authState = await _AuthenticationStateProvider.GetAuthenticationStateAsync();
-        var user = authState.User;
-
-
         //add item to cart
         var result = await
-        _cartRepository.UpdateCartAsync(user.FindFirst(u => u.Type.Contains("nameidentifier"))?.Value, productId, updateBy);
+        _cartRepository.UpdateCartAsync(OrderHeader.UserId, productId, updateBy);
         await LoadCart();
     }
     private async Task ProcessOrderCreation()
