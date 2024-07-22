@@ -1,0 +1,33 @@
+﻿@page "/order/confirmation/{orderId}"
+
+
+@if (IsProcessing)
+{
+    <div class="position-absolute w-100 vh-100 d-flex flex-column align-items-center bg-white justify-content-center">
+        <img src="/images/loading.gif" alt="loading" />
+    </div>
+}
+else
+{
+    <div class="text-center">
+        <h1 class="pt-4 text-success">You are one stop closer to delicious food!</h1>
+        <p>Your order is confirmed! Please note your order ID for any questions. </p>
+        <p>Order ID: <b>@orderId</b></p>
+        <hr/>
+        <img src="/images/lawn_leaf.jpg" width="40%"/>
+        <hr/>
+    </div>
+
+}
+
+@code {
+    [Parameter]
+    public string orderId { get; set; }
+
+    private bool IsProcessing { get; set; } = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        IsProcessing = false;
+    }
+}
