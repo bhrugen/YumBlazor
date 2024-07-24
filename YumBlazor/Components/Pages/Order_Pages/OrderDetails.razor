@@ -1,6 +1,8 @@
 ﻿@page "/order/details/{Id:int}"
 @using System.Globalization
+@using YumBlazor.Utility
 @inject IOrderRepository _orderRepository
+@inject IJSRuntime _JS
 @if (IsProcessing)
 {
     <div class="position-absolute w-100 vh-100 d-flex flex-column align-items-center bg-white justify-content-center">
@@ -56,9 +58,19 @@ else
                         <a href="order/list" class="btn btn-secondary  m-2 p-2" style="width:150px;">Back to Orders</a>
                     </div>
                     <div class="col-7 text-end">
-                        <button class="btn btn-danger m-2 p-2" style="width:150px;">Cancelled</button>
-                        <button class="btn btn-primary m-2 p-2" style="width:150px;">Ready for Pickup</button>
-                        <button class="btn btn-success m-2 p-2" style="width:150px;">Completed</button>
+                        @if (OrderHeader.Status != SD.StatusCancelled && OrderHeader.Status != SD.StatusCompleted)
+                        {
+                            <button class="btn btn-danger m-2 p-2" @onclick="()=>UpdateStatus(SD.StatusCancelled)" style="width:150px;">Cancelled</button>
+
+                            @if (OrderHeader.Status == SD.StatusPending)
+                            {
+                                <button class="btn btn-primary m-2 p-2" @onclick="()=>UpdateStatus(SD.StatusReadyForPickUp)" style="width:150px;">Ready for Pickup</button>
+                            }
+                            @if (OrderHeader.Status == SD.StatusReadyForPickUp)
+                            {
+                                <button class="btn btn-success m-2 p-2" @onclick="()=>UpdateStatus(SD.StatusCompleted)" style="width:150px;">Completed</button>
+                            }
+                        }
                     </div>
                 </div>
             </div>
@@ -95,5 +107,11 @@ else
     {
         OrderHeader = await _orderRepository.GetAsync(Id);
         // Load categories
+    }
+
+    private async Task UpdateStatus(string newStatus)
+    {
+        await _orderRepository.UpdateStatusAsync(Id, newStatus);
+        _JS?.ToastrSuccess("Status updated successfully to "+ newStatus);
     }
 }
