@@ -7,6 +7,7 @@ using YumBlazor.Components.Account;
 using YumBlazor.Data;
 using YumBlazor.Repository;
 using YumBlazor.Repository.IRepository;
+using YumBlazor.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,6 +24,7 @@ builder.Services.AddScoped<IdentityUserAccessor>();
 builder.Services.AddScoped<IdentityRedirectManager>();
 builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
 builder.Services.AddRadzenComponents();
+builder.Services.AddSingleton<SharedStateService>();
 builder.Services.AddAuthentication(options =>
 	{
 		options.DefaultScheme = IdentityConstants.ApplicationScheme;
