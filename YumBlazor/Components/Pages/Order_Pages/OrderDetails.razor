@@ -1,4 +1,5 @@
 ﻿@page "/order/details/{Id:int}"
+@using System.Globalization
 @inject IOrderRepository _orderRepository
 @if (IsProcessing)
 {
@@ -16,42 +17,43 @@ else
 
             <hr />
             <div class="px-3">
-                <p>Order Id:</p>
-                <p>Name: </p>
-                <p>Email: </p>
-                <p>Phone: </p>
-                <p>Order Status:  </p>
+                <p>Order Id: @OrderHeader.Id </p>
+                <p>Name: @OrderHeader.Name</p>
+                <p>Email: @OrderHeader.Email</p>
+                <p>Phone: @OrderHeader.PhoneNumber</p>
+                <p>Order Status:  @OrderHeader.Status</p>
             </div>
             <hr />
             <div class="card-body">
                 <h4 class="text-success">Menu Items</h4>
 
-
-                <div class="d-flex">
-                    <div class="d-flex w-100 justify-content-between">
+                @foreach (var details in OrderHeader.OrderDetails)
+                {
+                    <div class="d-flex">
+                        <div class="d-flex w-100 justify-content-between">
                         <p>
-                            &nbsp; -- ProductName
+                            &nbsp; -- @details.ProductName
                         </p>
                         <p>
-                            Price x Count =
+                                @details.Price.ToString("C", CultureInfo.GetCultureInfo("en-us")) x @details.Count =
                         </p>
                     </div>
                     <div class="ps-4">
-                        TOTAL
+                            @((details.Price * @details.Count).ToString("C", CultureInfo.GetCultureInfo("en-us")))
                     </div>
 
                 </div>
-
+                }
 
                 <hr />
                 <h4 class="text-success text-end">
-                    Order Total
+                    @OrderHeader.OrderTotal.ToString("C", CultureInfo.GetCultureInfo("en-us"))
                 </h4>
                 <hr />
 
                 <div class="row">
                     <div class="col-5">
-                        <a href="" class="btn btn-secondary  m-2 p-2" style="width:150px;">Back to Orders</a>
+                        <a href="order/list" class="btn btn-secondary  m-2 p-2" style="width:150px;">Back to Orders</a>
                     </div>
                     <div class="col-7 text-end">
                         <button class="btn btn-danger m-2 p-2" style="width:150px;">Cancelled</button>
