@@ -30,7 +30,12 @@ builder.Services.AddAuthentication(options =>
 		options.DefaultScheme = IdentityConstants.ApplicationScheme;
 		options.DefaultSignInScheme = IdentityConstants.ExternalScheme;
 	})
-	.AddIdentityCookies();
+	.AddFacebook(options =>
+    {
+        options.AppId = "1160092848406864";
+        options.AppSecret = "a5313a1337e6d9f137b37ed2a4f7cc45";
+    })
+    .AddIdentityCookies();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
