@@ -158,7 +158,7 @@ else
     {
         IsProcessing = true;
         var file = e.File;
-        FileInfo fileInfo = new(file.Name);
+        System.IO.FileInfo fileInfo = new(file.Name);
         var newFileName = $"{Guid.NewGuid()}.{fileInfo.Extension}";
         if (!Directory.Exists(_directoryPath))
         {
