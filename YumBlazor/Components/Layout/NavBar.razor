@@ -1,4 +1,9 @@
-﻿<nav class="navbar navbar-expand-md navbar-dark bg-dark pb-4 pt-4">
+﻿@using YumBlazor.Services
+@inject AuthenticationStateProvider _authStateProvider
+@inject SharedStateService _sharedstateService
+@inject IShoppingCartRepository _shoppingCartRepository
+
+<nav class="navbar navbar-expand-md navbar-dark bg-dark pb-4 pt-4">
 	<div class="container-fluid">
 		<a class="navbar-brand" href="">
 			<img src="/images/Logo.png" alt="Bootstrap" width="30" height="24">
@@ -17,7 +22,7 @@
 				</li>
 				<li class="nav-item mx-2">
 					<NavLink class="nav-link" href="/cart">
-						<span class="bi bi-cart3" aria-hidden="true"></span> Cart
+						<span class="bi bi-cart3" aria-hidden="true"></span> Cart (@_sharedstateService.TotalCartCount)
 					</NavLink>
 				</li>
 				<li class="nav-item mx-2">
@@ -61,3 +66,31 @@
 		</div>
 	</div>
 </nav>
+
+
+@code{
+	protected override void OnInitialized()
+	{
+		_sharedstateService.OnChange += OnSharedStateChange;
+		GetInitialCount();
+	}
+
+	private void OnSharedStateChange()
+	{
+		InvokeAsync(StateHasChanged);
+	}
+
+	public async Task GetInitialCount()
+	{
+		var authState = await _authStateProvider.GetAuthenticationStateAsync();
+		var user = authState.User;
+
+		_sharedstateService.TotalCartCount = 
+		await _shoppingCartRepository.GetTotalCartCartCountAsync(user?.FindFirst(u=>u.Type.Contains("nameidentifier"))?.Value);
+
+	}
+	public void Dispose()
+	{
+		_sharedstateService.OnChange -= OnSharedStateChange;
+	}
+}
