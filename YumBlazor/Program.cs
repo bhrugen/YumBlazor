@@ -35,7 +35,12 @@ builder.Services.AddAuthentication(options =>
         options.AppId = "1160092848406864";
         options.AppSecret = "a5313a1337e6d9f137b37ed2a4f7cc45";
     })
-    .AddIdentityCookies();
+	.AddMicrosoftAccount(options =>
+	{
+		options.ClientId = "0b170a00-4d7f-4eaf-8235-523dddedfec7";
+		options.ClientSecret = "2Na8Q~y8yNpt9iB0kZTyJj22fojeyzsrCbQPma0D";
+	})
+.AddIdentityCookies();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
