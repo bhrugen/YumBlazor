@@ -1,10 +1,13 @@
 ﻿@page "/order/list"
+@using Microsoft.AspNetCore.Authorization
+@using System.Security.Claims
+@using YumBlazor.Utility
 @inject IOrderRepository _orderRepository
 @inject NavigationManager _navigationManager
-
+@attribute [Authorize]
 @if (IsProcessing)
 {
-    <div class="position-absolute w-75 h-75 d-flex flex-column align-items-center bg-white justify-content-center">
+    <div class="position-absolute w-100 vh-100 d-flex flex-column align-items-center bg-white justify-content-center">
         <img src="/images/loading.gif" alt="loading" />
     </div>
 }
@@ -64,7 +67,13 @@ else
 @code {
     private bool IsProcessing { get; set; } = true;
     private IEnumerable<OrderHeader> OrderHeaders { get; set; } = new List<OrderHeader>();
-    
+
+    private bool? IsAdmin { get; set; }
+    private string? UserId { get; set; }
+
+    [CascadingParameter]
+    public Task<AuthenticationState> AuthenticationState { get; set; }
+
     protected override async Task OnInitializedAsync()
     {
 
@@ -83,8 +92,34 @@ else
 
     private async Task LoadOrderHeaders()
     {
-        OrderHeaders = await _orderRepository.GetAllAsync();
+        IsProcessing = true;
+        StateHasChanged();
+
+        await CheckAuthoriztion();
+        @if (IsAdmin == true)
+        {
+            OrderHeaders = await _orderRepository.GetAllAsync();
+        }
+        else
+        {
+            OrderHeaders = await _orderRepository.GetAllAsync(UserId);
+        }
         // Load categories
+
+        IsProcessing= false;
+    }
+
+    private async Task CheckAuthoriztion()
+    {
+        if(AuthenticationState is not null)
+        {
+            var authState = await AuthenticationState;
+            var user = authState?.User;
+
+            IsAdmin = user?.IsInRole(SD.Role_Admin);
+            UserId = user?.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+        }
     }
 
  
