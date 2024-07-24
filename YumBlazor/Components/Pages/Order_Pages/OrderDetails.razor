@@ -1,0 +1,97 @@
+﻿@page "/order/details/{Id:int}"
+@inject IOrderRepository _orderRepository
+@if (IsProcessing)
+{
+    <div class="position-absolute w-100 vh-100 d-flex flex-column align-items-center bg-white justify-content-center">
+        <img src="/images/loading.gif" alt="loading" />
+    </div>
+}
+else
+{
+    <div class="container my-5 mx-auto p-5 w-100" style="max-width: 950px;">
+        <div class="card" style="max-width: 750px;">
+            <div class="pt-3 text-success text-center">
+                <span class="h4"> ORDER DETAILS</span>
+            </div>
+
+            <hr />
+            <div class="px-3">
+                <p>Order Id:</p>
+                <p>Name: </p>
+                <p>Email: </p>
+                <p>Phone: </p>
+                <p>Order Status:  </p>
+            </div>
+            <hr />
+            <div class="card-body">
+                <h4 class="text-success">Menu Items</h4>
+
+
+                <div class="d-flex">
+                    <div class="d-flex w-100 justify-content-between">
+                        <p>
+                            &nbsp; -- ProductName
+                        </p>
+                        <p>
+                            Price x Count =
+                        </p>
+                    </div>
+                    <div class="ps-4">
+                        TOTAL
+                    </div>
+
+                </div>
+
+
+                <hr />
+                <h4 class="text-success text-end">
+                    Order Total
+                </h4>
+                <hr />
+
+                <div class="row">
+                    <div class="col-5">
+                        <a href="" class="btn btn-secondary  m-2 p-2" style="width:150px;">Back to Orders</a>
+                    </div>
+                    <div class="col-7 text-end">
+                        <button class="btn btn-danger m-2 p-2" style="width:150px;">Cancelled</button>
+                        <button class="btn btn-primary m-2 p-2" style="width:150px;">Ready for Pickup</button>
+                        <button class="btn btn-success m-2 p-2" style="width:150px;">Completed</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+}
+
+@code {
+    private bool IsProcessing { get; set; } = true;
+    [Parameter]
+    public int Id { get; set; }
+    private OrderHeader? OrderHeader = null;
+
+    protected override async Task OnInitializedAsync()
+    {
+
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await LoadOrder();
+            IsProcessing = false;
+            StateHasChanged();
+        }
+        //return base.OnAfterRenderAsync(firstRender);
+    }
+
+    private async Task LoadOrder()
+    {
+        OrderHeader = await _orderRepository.GetAsync(Id);
+        // Load categories
+    }
+}
