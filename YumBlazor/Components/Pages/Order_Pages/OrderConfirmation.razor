@@ -1,4 +1,4 @@
-﻿@page "/order/confirmation/{orderId}"
+﻿@page "/order/confirmation/{session_id}"
 
 
 @if (IsProcessing)
@@ -22,7 +22,7 @@ else
 
 @code {
     [Parameter]
-    public string orderId { get; set; }
+    public string session_id { get; set; }
 
     private bool IsProcessing { get; set; } = true;
 
