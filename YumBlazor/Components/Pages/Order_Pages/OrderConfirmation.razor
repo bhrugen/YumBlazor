@@ -1,4 +1,8 @@
 ﻿@page "/order/confirmation/{session_id}"
+@using YumBlazor.Services
+@using YumBlazor.Utility
+@inject PaymentService _paymentService
+@inject IShoppingCartRepository _shoppingCartRepository
 
 
 @if (IsProcessing)
@@ -12,7 +16,7 @@ else
     <div class="text-center">
         <h1 class="pt-4 text-success">You are one stop closer to delicious food!</h1>
         <p>Your order is confirmed! Please note your order ID for any questions. </p>
-        <p>Order ID: <b>@orderId</b></p>
+        <p>Order ID: <b>@orderHeader.Id</b></p>
         <hr/>
         <img src="/images/lawn_leaf.jpg" width="40%"/>
         <hr/>
@@ -25,9 +29,15 @@ else
     public string session_id { get; set; }
 
     private bool IsProcessing { get; set; } = true;
+    private OrderHeader orderHeader { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
+        orderHeader =  await _paymentService.CheckPaymentStatusAndUpdateOrder(session_id);
+        if (orderHeader.Status == SD.StatusApproved)
+        {
+            await _shoppingCartRepository.ClearCartAsync(orderHeader.UserId);
+        }
         IsProcessing = false;
     }
 }

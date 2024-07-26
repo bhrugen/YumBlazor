@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Radzen;
+using Stripe;
 using YumBlazor.Components;
 using YumBlazor.Components.Account;
 using YumBlazor.Data;
@@ -25,6 +26,7 @@ builder.Services.AddScoped<IdentityRedirectManager>();
 builder.Services.AddScoped<AuthenticationStateProvider, IdentityRevalidatingAuthenticationStateProvider>();
 builder.Services.AddRadzenComponents();
 builder.Services.AddSingleton<SharedStateService>();
+builder.Services.AddScoped<PaymentService>();
 builder.Services.AddAuthentication(options =>
 	{
 		options.DefaultScheme = IdentityConstants.ApplicationScheme;
@@ -62,7 +64,7 @@ builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.Requ
 builder.Services.AddSingleton<IEmailSender<ApplicationUser>, IdentityNoOpEmailSender>();
 
 var app = builder.Build();
-
+StripeConfiguration.ApiKey= builder.Configuration.GetSection("StripeApiKey").Value;
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
