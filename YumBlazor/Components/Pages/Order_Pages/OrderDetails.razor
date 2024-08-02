@@ -63,9 +63,9 @@ else
                         && _AuthenticationStateProvider.GetAuthenticationStateAsync().GetAwaiter().GetResult().User?.IsInRole(SD.Role_Admin) == true
                         )
                         {
-                            <button class="btn btn-danger m-2 p-2" @onclick="()=>UpdateStatus(SD.StatusCancelled)" style="width:150px;">Cancelled</button>
+                            <button class="btn btn-danger m-2 p-2" @onclick="()=>UpdateStatus(SD.StatusCancelled)" style="width:150px;">Cancel Order</button>
 
-                            @if (OrderHeader.Status == SD.StatusPending)
+                            @if (OrderHeader.Status == SD.StatusApproved)
                             {
                                 <button class="btn btn-primary m-2 p-2" @onclick="()=>UpdateStatus(SD.StatusReadyForPickUp)" style="width:150px;">Ready for Pickup</button>
                             }
