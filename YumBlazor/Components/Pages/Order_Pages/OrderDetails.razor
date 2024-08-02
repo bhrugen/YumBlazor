@@ -114,7 +114,7 @@ else
 
     private async Task UpdateStatus(string newStatus)
     {
-        await _orderRepository.UpdateStatusAsync(Id, newStatus);
+        await _orderRepository.UpdateStatusAsync(Id, newStatus,"");
         _JS?.ToastrSuccess("Status updated successfully to "+ newStatus);
     }
 }
